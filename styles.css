@@ -108,9 +108,9 @@ html[data-theme="light"] {
     --pop-color-sub: #0078d4;
     --pop-glow-sub: rgba(0, 120, 212, 0.2);
     --pop-glow-num: rgba(0, 120, 212, 0.15);
-    --pop-pill-bg: #ffffff;
-    --pop-pill-border: rgba(255, 255, 255, 0.9);
-    --pop-pill-text: #0078d4;
+    --pop-pill-bg: rgba(255, 255, 255, 0.15);
+    --pop-pill-border: rgba(255, 255, 255, 0.35);
+    --pop-pill-text: #ffffff;
 }
 
 /* ==========================================================================
@@ -231,16 +231,21 @@ html[data-theme="light"] #azure-header {
     font-family: var(--font-mono);
     font-weight: 600;
     font-size: 14px;
-    letter-spacing: -0.2px;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .divider {
     color: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
 }
 
 .service-name {
     font-size: 13px;
     font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .workspace-pill {
@@ -253,6 +258,8 @@ html[data-theme="light"] #azure-header {
     font-weight: 600;
     font-family: var(--font-mono);
     box-shadow: 0 0 10px var(--pop-pill-bg);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .header-center {

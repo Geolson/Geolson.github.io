@@ -526,6 +526,12 @@ let isPanning = false;
 let startPanX, startPanY;
 let canvasOffsetX = 0, canvasOffsetY = 0;
 
+// Global Card Drag State variables
+let draggedCard = null;
+let cardStartX = 0, cardStartY = 0;
+let dragStartX = 0, dragStartY = 0;
+let cardHasMoved = false;
+
 
 /* ==========================================================================
    VIEW ORCHESTRATION & NAVIGATION
@@ -807,87 +813,39 @@ function enableActivityDrag() {
     const cards = document.querySelectorAll('.activity-card');
     
     cards.forEach(card => {
-        let dragStartX, dragStartY, cardStartX, cardStartY;
-        let isDraggingCard = false;
-        let hasMoved = false;
-        
-        function onDragStart(clientX, clientY, e) {
-            e.stopPropagation();
-            isDraggingCard = true;
-            hasMoved = false;
-            cardStartX = parseInt(card.style.left);
-            cardStartY = parseInt(card.style.top);
-            dragStartX = clientX;
-            dragStartY = clientY;
-            card.style.zIndex = '10';
-            card.style.transition = 'none';
-        }
-        
-        function onDragMove(clientX, clientY) {
-            if (!isDraggingCard) return;
-            const dx = (clientX - dragStartX) / currentZoom;
-            const dy = (clientY - dragStartY) / currentZoom;
-            
-            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-                hasMoved = true;
-            }
-            
-            card.style.left = (cardStartX + dx) + 'px';
-            card.style.top = (cardStartY + dy) + 'px';
-            drawPipelineConnections();
-        }
-        
-        function onDragEnd() {
-            if (!isDraggingCard) return;
-            isDraggingCard = false;
-            card.style.zIndex = '';
-            card.style.transition = '';
-            
-            if (hasMoved) {
-                const actId = card.id.replace('node-', '');
-                const pipeline = portfolioData.pipelines[activePipelineId];
-                const act = pipeline.activities.find(a => a.id === actId);
-                if (act) {
-                    act.x = parseInt(card.style.left);
-                    act.y = parseInt(card.style.top);
-                }
-                drawPipelineConnections();
-            }
-        }
-        
-        // Mouse drag
+        // Mouse drag start
         card.addEventListener('mousedown', (e) => {
             if (e.target.closest('.activity-run-btn')) return;
-            onDragStart(e.clientX, e.clientY, e);
+            startCardDrag(card, e.clientX, e.clientY, e);
         });
         
-        // Touch drag
+        // Touch drag start
         card.addEventListener('touchstart', (e) => {
             if (e.target.closest('.activity-run-btn')) return;
             const touch = e.touches[0];
-            onDragStart(touch.clientX, touch.clientY, e);
+            startCardDrag(card, touch.clientX, touch.clientY, e);
         }, { passive: false });
-        
-        window.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
-        window.addEventListener('touchmove', (e) => {
-            if (isDraggingCard) {
-                e.preventDefault();
-                onDragMove(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: false });
-        
-        window.addEventListener('mouseup', onDragEnd);
-        window.addEventListener('touchend', onDragEnd);
         
         // Prevent click-selection when user was dragging
         card.addEventListener('click', (e) => {
-            if (hasMoved) {
+            if (cardHasMoved && draggedCard === card) {
                 e.stopPropagation();
                 e.preventDefault();
-                hasMoved = false;
             }
         }, true);
     });
+}
+
+function startCardDrag(card, clientX, clientY, e) {
+    e.stopPropagation();
+    draggedCard = card;
+    cardHasMoved = false;
+    cardStartX = parseInt(card.style.left) || 0;
+    cardStartY = parseInt(card.style.top) || 0;
+    dragStartX = clientX;
+    dragStartY = clientY;
+    card.style.zIndex = '10';
+    card.style.transition = 'none';
 }
 
 // Select an activity and display its property fields
@@ -1170,15 +1128,43 @@ pipelineCanvasContainer.addEventListener('mousedown', (e) => {
 });
 
 window.addEventListener('mousemove', (e) => {
-    if (!isPanning) return;
-    canvasOffsetX = e.clientX - startPanX;
-    canvasOffsetY = e.clientY - startPanY;
-    applyCanvasTransform();
+    if (isPanning) {
+        canvasOffsetX = e.clientX - startPanX;
+        canvasOffsetY = e.clientY - startPanY;
+        applyCanvasTransform();
+    } else if (draggedCard) {
+        const dx = (e.clientX - dragStartX) / currentZoom;
+        const dy = (e.clientY - dragStartY) / currentZoom;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            cardHasMoved = true;
+        }
+        draggedCard.style.left = (cardStartX + dx) + 'px';
+        draggedCard.style.top = (cardStartY + dy) + 'px';
+        drawPipelineConnections();
+    }
 });
 
 window.addEventListener('mouseup', () => {
-    isPanning = false;
-    pipelineCanvasContainer.style.cursor = 'default';
+    if (isPanning) {
+        isPanning = false;
+        pipelineCanvasContainer.style.cursor = 'default';
+    }
+    if (draggedCard) {
+        draggedCard.style.zIndex = '';
+        draggedCard.style.transition = '';
+        
+        if (cardHasMoved) {
+            const actId = draggedCard.id.replace('node-', '');
+            const pipeline = portfolioData.pipelines[activePipelineId];
+            const act = pipeline.activities.find(a => a.id === actId);
+            if (act) {
+                act.x = parseInt(draggedCard.style.left);
+                act.y = parseInt(draggedCard.style.top);
+            }
+            drawPipelineConnections();
+        }
+        draggedCard = null;
+    }
 });
 
 // Touch support for canvas panning on mobile/tablets
@@ -1192,21 +1178,56 @@ pipelineCanvasContainer.addEventListener('touchstart', (e) => {
 }, { passive: true });
 
 window.addEventListener('touchmove', (e) => {
-    if (!isPanning) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    canvasOffsetX = touch.clientX - startPanX;
-    canvasOffsetY = touch.clientY - startPanY;
-    applyCanvasTransform();
+    if (isPanning) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        canvasOffsetX = touch.clientX - startPanX;
+        canvasOffsetY = touch.clientY - startPanY;
+        applyCanvasTransform();
+    } else if (draggedCard) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const dx = (touch.clientX - dragStartX) / currentZoom;
+        const dy = (touch.clientY - dragStartY) / currentZoom;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            cardHasMoved = true;
+        }
+        draggedCard.style.left = (cardStartX + dx) + 'px';
+        draggedCard.style.top = (cardStartY + dy) + 'px';
+        drawPipelineConnections();
+    }
 }, { passive: false });
 
 window.addEventListener('touchend', () => {
-    isPanning = false;
+    if (isPanning) {
+        isPanning = false;
+    }
+    if (draggedCard) {
+        draggedCard.style.zIndex = '';
+        draggedCard.style.transition = '';
+        
+        if (cardHasMoved) {
+            const actId = draggedCard.id.replace('node-', '');
+            const pipeline = portfolioData.pipelines[activePipelineId];
+            const act = pipeline.activities.find(a => a.id === actId);
+            if (act) {
+                act.x = parseInt(draggedCard.style.left);
+                act.y = parseInt(draggedCard.style.top);
+            }
+            drawPipelineConnections();
+        }
+        draggedCard = null;
+    }
 });
 
 // Cancel handling
 window.addEventListener('touchcancel', () => {
     isPanning = false;
+    if (draggedCard) {
+        draggedCard.style.zIndex = '';
+        draggedCard.style.transition = '';
+        draggedCard = null;
+    }
 });
 
 // Pinch-to-zoom on canvas
