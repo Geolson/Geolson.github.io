@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arul Geolson A | Data Engineer Portfolio</title>
+    <meta name="description" content="Portfolio of Arul Geolson A, Data Engineer. Specializing in Azure Data Factory, Databricks, PySpark, and Delta Lake.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- External stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Interactive Background Particles -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- App Container -->
+    <div id="app-container">
+        
+        <!-- Azure Header -->
+        <header id="azure-header">
+            <div class="header-left">
+                <button id="mobile-menu-btn" class="icon-btn" title="Toggle Explorer">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div class="adf-logo-wrapper">
+                    <!-- SVG Azure Data Factory Logo -->
+                    <svg viewBox="0 0 32 32" class="adf-logo">
+                        <path d="M6 10a4 4 0 1 1 8 0 4 4 0 0 1-8 0z" fill="#0078d4"/>
+                        <path d="M18 22a4 4 0 1 1 8 0 4 4 0 0 1-8 0z" fill="#50e6ff"/>
+                        <path d="M10 10v6a4 4 0 0 0 4 4h4" fill="none" stroke="#0078d4" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="14" cy="20" r="2.5" fill="#f2f2f2"/>
+                    </svg>
+                </div>
+                <span class="app-title">root@arul-data-studio</span>
+                <span class="divider">|</span>
+                <span class="service-name">Data Engineer</span>
+                <span class="workspace-pill">adf-arul-geolson</span>
+            </div>
+            
+            <div class="header-center">
+                <div class="search-bar">
+                    <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+                    <input type="text" id="header-search" placeholder="Search pipelines, datasets, triggers, activities...">
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <!-- Git Integration Indicator -->
+                <div class="git-status">
+                    <svg class="git-icon" viewBox="0 0 24 24"><path d="M19 13.5c-.83 0-1.5-.67-1.5-1.5v-3c0-1.1-.9-2-2-2H10V5.5c0-.83-.67-1.5-1.5-1.5S7 4.67 7 5.5v3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4v3H10v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V11h3c1.1 0 2 .9 2 2v2.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V15c0-.83-.67-1.5-1.5-1.5zM8.5 12c-.83 0-1.5-.67-1.5-1.5S7.67 9 8.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" fill="currentColor"/></svg>
+                    <span>repository-connected (main)</span>
+                </div>
+                
+                <!-- Dark/Light Theme Toggle -->
+                <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme (Dark / Light)">
+                    <!-- Light Theme Moon Icon -->
+                    <svg class="theme-icon moon-icon" viewBox="0 0 24 24"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-9 8.3-9.8.5-.1 1 .3.9.8-.1.5-.6.8-1.1.7-3.7.6-6.4 3.8-6.4 7.7 0 4.4 3.6 8 8 8 3.9 0 7.1-2.7 7.7-6.4-.1-.5.2-1 .7-1.1.5-.1.9.2.8.7-.8 4.8-5 8.3-9.8 8.3z" fill="currentColor"/></svg>
+                    <!-- Dark Theme Sun Icon -->
+                    <svg class="theme-icon sun-icon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.02.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" fill="currentColor"/></svg>
+                </button>
+                
+                <span class="user-profile-badge" title="Arul Geolson A">
+                    <img id="avatar-img" src="IMG_20260405_182839.jpg" alt="Arul Geolson" onerror="this.src='local-acc-image.jpg';">
+                </span>
+            </div>
+        </header>
+
+        <!-- Main Layout Split -->
+        <main id="main-layout">
+            
+            <!-- Left Icon Sidebar -->
+            <nav id="left-sidebar">
+                <div class="sidebar-top">
+                    <!-- Home Tab Button -->
+                    <button class="nav-tab active" data-target="home-view" id="nav-btn-home" title="Home Dashboard">
+                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+                        <span class="nav-label">Home</span>
+                    </button>
+                    <!-- Author Tab Button (The Canvas) -->
+                    <button class="nav-tab" data-target="author-view" id="nav-btn-author" title="Author (Pipelines)">
+                        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+                        <span class="nav-label">Author</span>
+                    </button>
+                    <!-- Monitor Tab Button -->
+                    <button class="nav-tab" data-target="monitor-view" id="nav-btn-monitor" title="Monitor Runs">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/></svg>
+                        <span class="nav-label">Monitor</span>
+                    </button>
+                    <!-- Manage Tab Button -->
+                    <button class="nav-tab" data-target="manage-view" id="nav-btn-manage" title="Manage Connections & Certs">
+                        <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="currentColor"/></svg>
+                        <span class="nav-label">Manage</span>
+                    </button>
+                </div>
+                <div class="sidebar-bottom">
+                    <button class="icon-btn-side" id="collapse-sidebar-btn" title="Collapse Explorer">
+                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Main Content Container -->
+            <div id="content-container">
+                
+                <!-- 1. HOME VIEW (Overview Dashboard) -->
+                <section id="home-view" class="view-panel active">
+                    <div class="home-hero">
+                        <div class="hero-left">
+                            <div class="glitch-title" data-text="Arul Geolson A">Arul Geolson A</div>
+                            <h2 class="sub-headline">Data Engineer</h2>
+                            <p class="summary-paragraph">
+                                Results-driven Data Engineer with 4 years of experience building scalable cloud-based data platforms using Azure, Databricks, PySpark, and SQL. Spearheaded the migration of 144+ legacy SSIS pipelines and 21+ Talend (Java) workflows to Azure Databricks PySpark Delta Lake, realizing 60% database compute cost savings while maintaining 99.9% support uptime. Specialist in Medallion Architecture, real-time streaming, CI/CD automation, and secure Unity Catalog governance.
+                            </p>
+                            <div class="social-links">
+                                <a href="https://www.linkedin.com/in/arul-geolson/" target="_blank" class="social-pill" id="link-linkedin">
+                                    <span class="social-icon">in</span> LinkedIn
+                                </a>
+                                <a href="https://github.com/Geolson" target="_blank" class="social-pill" id="link-github">
+                                    <span class="social-icon">git</span> GitHub
+                                </a>
+                                <a href="https://www.instagram.com/arulgeolson/" target="_blank" class="social-pill" id="link-instagram">
+                                    <span class="social-icon">ig</span> Instagram
+                                </a>
+                                <a href="Arul_Geolson_Resume.pdf" target="_blank" class="social-pill resume-pill" download id="link-resume">
+                                    <span class="social-icon">↓</span> Resume PDF
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hero-right">
+                            <div class="profile-card-container">
+                                <div class="profile-card">
+                                    <div class="profile-card-inner">
+                                        <div class="profile-scanner"></div>
+                                        <img src="IMG_20260405_182839.jpg" alt="Arul Geolson A" class="profile-photo" onerror="this.src='local-acc-image.jpg';">
+                                        <div class="pulse-ring"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-main-content">
+                                <div class="stat-num" id="stat-years">4+</div>
+                                <div class="stat-label">Years of Experience</div>
+                            </div>
+                            <div class="stat-hover-details">
+                                <span class="detail-tag">Infosys Consultant</span>
+                                <p>Full-time Data Engineer (2022 - Present) leading cloud architecture & pipeline modernization for global clients.</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-main-content">
+                                <div class="stat-num" id="stat-pipelines">144+</div>
+                                <div class="stat-label">SSIS Pipelines Migrated</div>
+                            </div>
+                            <div class="stat-hover-details">
+                                <span class="detail-tag">H&R Block Project</span>
+                                <p>Decommissioned legacy SSIS workflows and restructured staging DBs into native ADF Orchestrations.</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-main-content">
+                                <div class="stat-num" id="stat-talend">21+</div>
+                                <div class="stat-label">Talend to PySpark Migrated</div>
+                            </div>
+                            <div class="stat-hover-details">
+                                <span class="detail-tag">Pfizer Clinical Project</span>
+                                <p>Translated compiled Java ETL configurations into highly optimized PySpark notebooks on Databricks.</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-main-content">
+                                <div class="stat-num" id="stat-savings">60%</div>
+                                <div class="stat-label">Database Cost Savings</div>
+                            </div>
+                            <div class="stat-hover-details">
+                                <span class="detail-tag">Cost Optimization</span>
+                                <p>Reduced warehouse runtimes through indexing, Delta CDC (MERGE), and autoscaling compute rules.</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-main-content">
+                                <div class="stat-num" id="stat-reports">65+</div>
+                                <div class="stat-label">Power BI Deployed</div>
+                            </div>
+                            <div class="stat-hover-details">
+                                <span class="detail-tag">Enterprise Reporting</span>
+                                <p>Created secure semantic data models and scheduled refreshes, boosting remote analyst efficiency by 40%.</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-main-content">
+                                <div class="stat-num" id="stat-loaders">99.9%</div>
+                                <div class="stat-label">Support Uptime</div>
+                            </div>
+                            <div class="stat-hover-details">
+                                <span class="detail-tag">Production Support</span>
+                                <p>Managed L2/L3 workflows, database synchronization, and implemented automated alert notifications.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADF Quick Actions -->
+                    <div class="quick-actions-section">
+                        <h3>Factory Quick Actions</h3>
+                        <div class="action-cards">
+                            <div class="action-card" onclick="document.getElementById('nav-btn-author').click(); selectPipeline('pfizer');">
+                                <div class="action-icon copy-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M19 3H4.99c-1.11 0-1.98.89-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10z" fill="currentColor"/></svg>
+                                </div>
+                                <div class="action-info">
+                                    <h4>Open Pfizer Clinical Pipeline</h4>
+                                    <p>Explore the migration of legacy Java-based Talend pipelines to optimized PySpark notebooks, Medallion storage, and Unity Catalog.</p>
+                                </div>
+                            </div>
+                            <div class="action-card" onclick="document.getElementById('nav-btn-author').click(); selectPipeline('hrblock');">
+                                <div class="action-icon db-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 4.02 2 6.5s4.48 4.5 10 4.5 10-2.02 10-4.5S17.52 2 12 2zm0 18c-5.52 0-10-2.02-10-4.5V18c0 2.48 4.48 4.5 10 4.5s10-2.02 10-4.5v-2.5c0 2.48-4.48 4.5-10 4.5zm0-9c-5.52 0-10-2.02-10-4.5v2.5c0 2.48 4.48 4.5 10 4.5s10-2.02 10-4.5V11c0 2.48-4.48 4.5-10 4.5z" fill="currentColor"/></svg>
+                                </div>
+                                <div class="action-info">
+                                    <h4>Open H&R Block Migration</h4>
+                                    <p>Explore the migration of 144 SSIS pipelines to ADF, automated deployments, database synchronization, and production support.</p>
+                                </div>
+                            </div>
+                            <div class="action-card" onclick="document.getElementById('nav-btn-manage').click();">
+                                <div class="action-icon cert-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" fill="currentColor"/></svg>
+                                </div>
+                                <div class="action-info">
+                                    <h4>Verify Professional Certifications</h4>
+                                    <p>Review and verify official Databricks and Microsoft credentials via secure public vault keys.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 2. AUTHOR VIEW (ADF Orchestration Canvas) -->
+                <section id="author-view" class="view-panel">
+                    <div id="author-layout">
+                        
+                        <!-- Left Factory Resource Explorer -->
+                        <aside id="resource-explorer">
+                            <div class="explorer-header">
+                                <span>Factory Resources</span>
+                                <button class="explorer-filter-btn" title="Filter Resources">
+                                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" fill="currentColor"/></svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Search Explorer -->
+                            <div class="explorer-search">
+                                <input type="text" id="explorer-search-input" placeholder="Search resources...">
+                            </div>
+                            
+                            <!-- Explorer Folders (Accordion) -->
+                            <div class="explorer-tree">
+                                <!-- Pipelines Folder -->
+                                <div class="tree-folder active">
+                                    <div class="folder-title" onclick="toggleFolder(this)">
+                                        <span class="chevron">▼</span>
+                                        <svg class="folder-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" fill="currentColor"/></svg>
+                                        <span class="folder-name">Pipelines</span>
+                                    </div>
+                                    <div class="folder-contents">
+                                        <div class="tree-item active" id="tree-pfizer" onclick="selectPipeline('pfizer')">
+                                            <span class="item-icon-pipe">⚡</span>
+                                            <span class="item-name">Pfizer_ClinicalData_Ingest</span>
+                                        </div>
+                                        <div class="tree-item" id="tree-hrblock" onclick="selectPipeline('hrblock')">
+                                            <span class="item-icon-pipe">⚡</span>
+                                            <span class="item-name">HRBlock_SSIS_Migration</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Datasets Folder -->
+                                <div class="tree-folder active">
+                                    <div class="folder-title" onclick="toggleFolder(this)">
+                                        <span class="chevron">▼</span>
+                                        <svg class="folder-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" fill="currentColor"/></svg>
+                                        <span class="folder-name">Datasets</span>
+                                    </div>
+                                    <div class="folder-contents" id="datasets-contents">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <!-- Linked Services Folder -->
+                                <div class="tree-folder">
+                                    <div class="folder-title" onclick="toggleFolder(this)">
+                                        <span class="chevron">▲</span>
+                                        <svg class="folder-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" fill="currentColor"/></svg>
+                                        <span class="folder-name">Linked Services</span>
+                                    </div>
+                                    <div class="folder-contents" style="display:none;" id="linkedservices-contents">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <!-- Triggers Folder -->
+                                <div class="tree-folder">
+                                    <div class="folder-title" onclick="toggleFolder(this)">
+                                        <span class="chevron">▲</span>
+                                        <svg class="folder-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" fill="currentColor"/></svg>
+                                        <span class="folder-name">Triggers</span>
+                                    </div>
+                                    <div class="folder-contents" style="display:none;" id="triggers-contents">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <!-- Canvas Workspace (Center-Right) -->
+                        <div id="canvas-workspace">
+                            
+                            <!-- Tab Header -->
+                            <div id="canvas-tabs">
+                                <div class="canvas-tab active" id="tab-pfizer" onclick="selectPipeline('pfizer')">
+                                    <span class="tab-pipe-icon">⚡</span>
+                                    <span class="tab-title">Pfizer_ClinicalData_Ingest</span>
+                                    <span class="tab-close" onclick="closeTab('pfizer', event)">×</span>
+                                </div>
+                                <div class="canvas-tab" id="tab-hrblock" onclick="selectPipeline('hrblock')">
+                                    <span class="tab-pipe-icon">⚡</span>
+                                    <span class="tab-title">HRBlock_SSIS_Migration</span>
+                                    <span class="tab-close" onclick="closeTab('hrblock', event)">×</span>
+                                </div>
+                            </div>
+
+                            <!-- Canvas Action Ribbon -->
+                            <div id="canvas-ribbon">
+                                <div class="ribbon-group">
+                                    <button class="ribbon-btn" onclick="validatePipeline()" id="validate-btn">
+                                        <span class="ribbon-icon">✓</span> Validate
+                                    </button>
+                                    <button class="ribbon-btn primary-ribbon-btn" onclick="runPipelineDebug()" id="debug-btn">
+                                        <span class="ribbon-icon">▶</span> Debug Run
+                                    </button>
+                                    <button class="ribbon-btn" onclick="publishAll()" id="publish-btn">
+                                        <span class="ribbon-icon">☁</span> Publish All
+                                    </button>
+                                </div>
+                                <div class="zoom-controls">
+                                    <button onclick="zoomCanvas(0.1)" title="Zoom In">+</button>
+                                    <button onclick="zoomCanvas(-0.1)" title="Zoom Out">-</button>
+                                    <button onclick="resetZoom()" title="Reset Zoom">Fit</button>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Grid Canvas -->
+                            <div id="pipeline-canvas-container">
+                                <!-- Drawing SVG Connections (success/fail lines) -->
+                                <svg id="connections-svg"></svg>
+                                
+                                <!-- Floating Activities Container -->
+                                <div id="activities-container">
+                                    <!-- Populated dynamically via JS based on selected tab -->
+                                </div>
+                            </div>
+
+                            <!-- Bottom Properties Panel -->
+                            <div id="properties-pane">
+                                <div class="properties-header">
+                                    <div class="properties-tabs">
+                                        <button class="prop-tab active" onclick="switchPropertiesTab('general')">General</button>
+                                        <button class="prop-tab" onclick="switchPropertiesTab('settings')" id="prop-settings-tab">Settings</button>
+                                        <button class="prop-tab" onclick="switchPropertiesTab('parameters')">Parameters</button>
+                                        <button class="prop-tab" onclick="switchPropertiesTab('runhistory')">Run Logs</button>
+                                    </div>
+                                    <button class="close-properties-btn" onclick="togglePropertiesPane()">
+                                        <span id="prop-collapse-arrow">▼</span>
+                                    </button>
+                                </div>
+                                <div class="properties-content">
+                                    <!-- Populated dynamically via JS depending on selected activity -->
+                                    <div id="properties-view-container"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 3. MONITOR VIEW (Running Log / Gantt Chart) -->
+                <section id="monitor-view" class="view-panel">
+                    <div class="monitor-header">
+                        <h2>Pipeline Runs</h2>
+                        <button class="ribbon-btn" onclick="refreshMonitorLogs()">↻ Refresh</button>
+                    </div>
+                    
+                    <div class="monitor-table-container">
+                        <table class="monitor-table">
+                            <thead>
+                                <tr>
+                                    <th>Pipeline Name</th>
+                                    <th>Run ID</th>
+                                    <th>Start Time</th>
+                                    <th>Duration</th>
+                                    <th>Trigger Type</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monitor-runs-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Nested Activity Runs Monitoring (Detail Log Modal) -->
+                    <div id="activity-runs-drilldown" style="display:none;">
+                        <div class="drilldown-header">
+                            <h3>Activity Runs: <span id="drilldown-pipeline-name">Pipeline</span></h3>
+                            <button class="close-btn" onclick="hideDrilldown()">×</button>
+                        </div>
+                        <div class="monitor-table-container mini-table">
+                            <table class="monitor-table">
+                                <thead>
+                                    <tr>
+                                        <th>Activity Name</th>
+                                        <th>Activity Type</th>
+                                        <th>Run Duration</th>
+                                        <th>Compute Resource</th>
+                                        <th>Status</th>
+                                        <th>Message / Output</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-runs-tbody">
+                                    <!-- Populated dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 4. MANAGE VIEW (Secure vault & Connections) -->
+                <section id="manage-view" class="view-panel">
+                    <div class="manage-layout">
+                        <div class="manage-sidebar">
+                            <h4>Security & Connections</h4>
+                            <ul class="manage-nav-list">
+                                <li class="active" onclick="switchManageSubTab('certs', this)">Credentials & Certs</li>
+                                <li onclick="switchManageSubTab('linked', this)">Linked Services</li>
+                                <li onclick="switchManageSubTab('global', this)">Global Parameters</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="manage-main-content">
+                            
+                            <!-- Certifications Subpanel -->
+                            <div id="manage-subpanel-certs" class="manage-subpanel active">
+                                <h3>Credentials Vault</h3>
+                                <p class="description-text">Encrypted certifications, verification hashes, and academic qualifications of Arul Geolson A.</p>
+                                
+                                <div class="credentials-vault-grid">
+                                    <!-- Credential 1 -->
+                                    <div class="vault-card">
+                                        <div class="vault-card-header">
+                                            <span class="vault-type">AZURE KEY VAULT SECRET</span>
+                                            <span class="secret-status active">Verified</span>
+                                        </div>
+                                        <h4>Databricks Certified Data Engineer Professional</h4>
+                                        <div class="secret-meta">
+                                            <div><strong>Secret Name:</strong> <code>db-cert-de-professional</code></div>
+                                            <div><strong>Issue Date:</strong> <code>May 2026</code></div>
+                                        </div>
+                                        <a href="https://credentials.databricks.com/8f0a3f71-23c0-4cf5-ba71-324f0dac4202#acc.WZxtVpXB" target="_blank" class="vault-decrypt-btn">
+                                            Unlock Credentials Link
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Credential 2 -->
+                                    <div class="vault-card">
+                                        <div class="vault-card-header">
+                                            <span class="vault-type">AZURE KEY VAULT SECRET</span>
+                                            <span class="secret-status active">Verified</span>
+                                        </div>
+                                        <h4>Databricks Certified Generative AI Associate</h4>
+                                        <div class="secret-meta">
+                                            <div><strong>Secret Name:</strong> <code>db-cert-genai-associate</code></div>
+                                            <div><strong>Issue Date:</strong> <code>March 2026</code></div>
+                                        </div>
+                                        <a href="https://credentials.databricks.com/2bc3e379-6b4b-473c-a875-1479fa2d5a9d#acc.RGzqn3C8" target="_blank" class="vault-decrypt-btn">
+                                            Unlock Credentials Link
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Credential 3 -->
+                                    <div class="vault-card">
+                                        <div class="vault-card-header">
+                                            <span class="vault-type">AZURE KEY VAULT SECRET</span>
+                                            <span class="secret-status active">Verified</span>
+                                        </div>
+                                        <h4>Databricks Certified Data Engineer Associate</h4>
+                                        <div class="secret-meta">
+                                            <div><strong>Secret Name:</strong> <code>db-cert-de-associate</code></div>
+                                            <div><strong>Issue Date:</strong> <code>January 2026</code></div>
+                                        </div>
+                                        <a href="https://credentials.databricks.com/fe1e2c15-6e18-47a3-945e-14d2cf2468d7#acc.1aMos309" target="_blank" class="vault-decrypt-btn">
+                                            Unlock Credentials Link
+                                        </a>
+                                    </div>
+
+                                    <!-- Credential 4 -->
+                                    <div class="vault-card">
+                                        <div class="vault-card-header">
+                                            <span class="vault-type">AZURE KEY VAULT SECRET</span>
+                                            <span class="secret-status active">Verified</span>
+                                        </div>
+                                        <h4>Azure Fundamentals (AZ-900)</h4>
+                                        <div class="secret-meta">
+                                            <div><strong>Secret Name:</strong> <code>azure-fundamentals-az900</code></div>
+                                            <div><strong>Issue Date:</strong> <code>January 2024</code></div>
+                                        </div>
+                                        <a href="https://learn.microsoft.com/en-gb/users/arulgeolson-7331/credentials/b074d4a6d1bd5b9d" target="_blank" class="vault-decrypt-btn">
+                                            Unlock Credentials Link
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Linked Services Subpanel -->
+                            <div id="manage-subpanel-linked" class="manage-subpanel">
+                                <h3>Linked Services</h3>
+                                <p class="description-text">Secure connection configurations for computation servers, file storages, Git repos, and analytical tooling.</p>
+                                <div class="monitor-table-container mini-table">
+                                    <table class="monitor-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Description</th>
+                                                <th>Connection Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="linked-services-tbody">
+                                            <!-- Populated dynamically via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Global Parameters Subpanel -->
+                            <div id="manage-subpanel-global" class="manage-subpanel">
+                                <h3>Global Parameters</h3>
+                                <p class="description-text">Global key-value pairs configured across the entire portfolio instance.</p>
+                                <div class="monitor-table-container mini-table">
+                                    <table class="monitor-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter Name</th>
+                                                <th>Type</th>
+                                                <th>Value</th>
+                                                <th>Usage Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>DeveloperName</code></td>
+                                                <td>String</td>
+                                                <td>"Arul Geolson A"</td>
+                                                <td>Full name of the factory owner</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>DeveloperEmail</code></td>
+                                                <td>String</td>
+                                                <td>"geolson.offl@gmail.com"</td>
+                                                <td>Primary email connection string</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>TotalYearsExperience</code></td>
+                                                <td>Float</td>
+                                                <td>4.0</td>
+                                                <td>Data Engineering experience duration counter</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>MainLocation</code></td>
+                                                <td>String</td>
+                                                <td>"Nagercoil, Tamil Nadu, India"</td>
+                                                <td>Current geographic deployment location</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>EducationDegree</code></td>
+                                                <td>String</td>
+                                                <td>"Bachelor of Engineering (CSE) - 2022"</td>
+                                                <td>Undergraduate credentials node reference</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>CollegeName</code></td>
+                                                <td>String</td>
+                                                <td>"St. Xavier’s Catholic College of Engineering"</td>
+                                                <td>Deployment institute of graduation</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>PrimaryLanguages</code></td>
+                                                <td>Array</td>
+                                                <td>["Tamil (Native)", "English (Professional)", "Malayalam (Proficient)"]</td>
+                                                <td>Spoken language interface configuration</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Version control build stamp -->
+                <div class="version-label">v1.4.2-stable</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script file -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Backups
+backup/
+backup_v2/
+backup_v3/
+
+# Resources list
+resources.txt
+
+# OS files
+.DS_Store
+Thumbs.db
