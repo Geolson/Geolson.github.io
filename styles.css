@@ -813,6 +813,16 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     transform: translateY(0);
 }
 
+.stat-card.tapped .stat-hover-details {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stat-card.tapped .stat-main-content {
+    transform: translateY(-8px);
+    opacity: 0.05;
+}
+
 .detail-tag {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -1567,6 +1577,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     border: 1px solid var(--glass-border);
     border-radius: var(--border-radius-md);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     box-shadow: 0 4px 16px rgba(0,0,0,0.05);
 }
 
@@ -1692,6 +1703,8 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 
 #manage-view {
     padding: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .manage-layout {
@@ -1859,6 +1872,29 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
    RESPONSIVE OVERRIDES
    ========================================================================== */
 
+/* Tablet Landscape (Widths <= 1024px) */
+@media screen and (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .action-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .credentials-vault-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #resource-explorer {
+        width: 200px;
+    }
+    
+    .header-center {
+        flex: 0 1 280px;
+    }
+}
+
 /* Tablet Portrait & Large Mobile (Widths <= 768px) */
 @media screen and (max-width: 768px) {
     body {
@@ -1891,6 +1927,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
         right: 0;
         padding: 0 16px;
         order: 10;
+        z-index: 100;
     }
     
     .sidebar-top {
@@ -1923,6 +1960,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     #content-container {
         height: calc(100vh - 48px - 52px);
         margin-bottom: 52px;
+        overflow-y: auto;
     }
     
     /* Home View Stacking */
@@ -1930,6 +1968,8 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
         padding: 16px;
         gap: 20px;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        height: 100%;
     }
     
     .home-hero {
@@ -1955,6 +1995,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     
     .stat-card {
         padding: 14px;
+        min-height: auto;
     }
     
     .stat-num {
@@ -2041,6 +2082,40 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     .manage-main-content {
         padding: 16px;
     }
+
+    .activity-card {
+        width: 150px;
+        height: 42px;
+        padding: 0 6px;
+    }
+    
+    .activity-title {
+        font-size: 9px;
+    }
+    
+    .activity-subtitle {
+        font-size: 8px;
+    }
+    
+    .profile-card-container {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .profile-card {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .summary-paragraph {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    #activity-runs-drilldown {
+        margin: 8px;
+        padding: 12px;
+    }
 }
 
 /* Small Mobile (Widths <= 480px) */
@@ -2099,6 +2174,17 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     .prop-label {
         padding-top: 0;
     }
+
+    .properties-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .prop-tab {
+        white-space: nowrap;
+        font-size: 10px;
+        padding: 0 10px;
+    }
 }
 
 /* Landscape / Extremely short viewports (height <= 480px) */
@@ -2129,5 +2215,16 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     .version-label {
         bottom: 60px; /* Float above the fixed bottom navigation bar */
         right: 16px;
+    }
+}
+
+/* Touch-device overrides — make hover-dependent elements accessible */
+@media (hover: none) {
+    .activity-run-btn {
+        opacity: 0.7;
+    }
+    
+    .activity-card:hover .activity-run-btn {
+        opacity: 1;
     }
 }

@@ -31,13 +31,26 @@ window.addEventListener('mouseout', () => {
     mouse.y = null;
 });
 
+// Track touch position for particle effects
+window.addEventListener('touchmove', (event) => {
+    if (event.touches.length === 1) {
+        mouse.x = event.touches[0].clientX;
+        mouse.y = event.touches[0].clientY;
+    }
+}, { passive: true });
+
+window.addEventListener('touchend', () => {
+    mouse.x = null;
+    mouse.y = null;
+});
+
 // Spawn new particles on click
 window.addEventListener('click', (event) => {
     // Only spawn particles if not clicking on UI buttons / interactive elements
     if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'A' && !event.target.closest('#azure-header') && !event.target.closest('#left-sidebar') && !event.target.closest('#resource-explorer') && !event.target.closest('#properties-pane')) {
         const count = 15;
         for (let i = 0; i < count; i++) {
-            particlesArray.push(new Particle(event.x, event.y, true));
+            particlesArray.push(new Particle(event.clientX, event.clientY, true));
             if (particlesArray.length > 300) {
                 particlesArray.shift(); // Keep count capped
             }
@@ -786,6 +799,95 @@ function loadPipelineActivities(pipelineId) {
     });
 
     drawPipelineConnections();
+    enableActivityDrag();
+}
+
+// Enable drag-to-move for activity cards on canvas
+function enableActivityDrag() {
+    const cards = document.querySelectorAll('.activity-card');
+    
+    cards.forEach(card => {
+        let dragStartX, dragStartY, cardStartX, cardStartY;
+        let isDraggingCard = false;
+        let hasMoved = false;
+        
+        function onDragStart(clientX, clientY, e) {
+            e.stopPropagation();
+            isDraggingCard = true;
+            hasMoved = false;
+            cardStartX = parseInt(card.style.left);
+            cardStartY = parseInt(card.style.top);
+            dragStartX = clientX;
+            dragStartY = clientY;
+            card.style.zIndex = '10';
+            card.style.transition = 'none';
+        }
+        
+        function onDragMove(clientX, clientY) {
+            if (!isDraggingCard) return;
+            const dx = (clientX - dragStartX) / currentZoom;
+            const dy = (clientY - dragStartY) / currentZoom;
+            
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+                hasMoved = true;
+            }
+            
+            card.style.left = (cardStartX + dx) + 'px';
+            card.style.top = (cardStartY + dy) + 'px';
+            drawPipelineConnections();
+        }
+        
+        function onDragEnd() {
+            if (!isDraggingCard) return;
+            isDraggingCard = false;
+            card.style.zIndex = '';
+            card.style.transition = '';
+            
+            if (hasMoved) {
+                const actId = card.id.replace('node-', '');
+                const pipeline = portfolioData.pipelines[activePipelineId];
+                const act = pipeline.activities.find(a => a.id === actId);
+                if (act) {
+                    act.x = parseInt(card.style.left);
+                    act.y = parseInt(card.style.top);
+                }
+                drawPipelineConnections();
+            }
+        }
+        
+        // Mouse drag
+        card.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.activity-run-btn')) return;
+            onDragStart(e.clientX, e.clientY, e);
+        });
+        
+        // Touch drag
+        card.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.activity-run-btn')) return;
+            const touch = e.touches[0];
+            onDragStart(touch.clientX, touch.clientY, e);
+        }, { passive: false });
+        
+        window.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
+        window.addEventListener('touchmove', (e) => {
+            if (isDraggingCard) {
+                e.preventDefault();
+                onDragMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: false });
+        
+        window.addEventListener('mouseup', onDragEnd);
+        window.addEventListener('touchend', onDragEnd);
+        
+        // Prevent click-selection when user was dragging
+        card.addEventListener('click', (e) => {
+            if (hasMoved) {
+                e.stopPropagation();
+                e.preventDefault();
+                hasMoved = false;
+            }
+        }, true);
+    });
 }
 
 // Select an activity and display its property fields
@@ -841,7 +943,7 @@ function drawPipelineConnections() {
         
         if (fromNode && toNode) {
             // Fetch layout locations
-            const fromX = parseInt(fromNode.style.left) + 180;
+            const fromX = parseInt(fromNode.style.left) + fromNode.offsetWidth;
             const fromY = parseInt(fromNode.style.top) + 24;
             const toX = parseInt(toNode.style.left);
             const toY = parseInt(toNode.style.top) + 24;
@@ -1091,15 +1193,45 @@ pipelineCanvasContainer.addEventListener('touchstart', (e) => {
 
 window.addEventListener('touchmove', (e) => {
     if (!isPanning) return;
+    e.preventDefault();
     const touch = e.touches[0];
     canvasOffsetX = touch.clientX - startPanX;
     canvasOffsetY = touch.clientY - startPanY;
     applyCanvasTransform();
-}, { passive: true });
+}, { passive: false });
 
 window.addEventListener('touchend', () => {
     isPanning = false;
 });
+
+// Cancel handling
+window.addEventListener('touchcancel', () => {
+    isPanning = false;
+});
+
+// Pinch-to-zoom on canvas
+let lastPinchDist = 0;
+pipelineCanvasContainer.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+        isPanning = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastPinchDist = Math.sqrt(dx * dx + dy * dy);
+    }
+}, { passive: true });
+
+pipelineCanvasContainer.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const delta = dist - lastPinchDist;
+        if (Math.abs(delta) > 5) {
+            zoomCanvas(delta > 0 ? 0.03 : -0.03);
+            lastPinchDist = dist;
+        }
+    }
+}, { passive: true });
 
 
 /* ==========================================================================
@@ -1336,6 +1468,17 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 
 // Load default canvas diagrams
 selectPipeline('pfizer');
+
+// Tap-to-toggle stat card details on touch devices
+document.querySelectorAll('.stat-card').forEach(card => {
+    card.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.stat-card.tapped').forEach(c => {
+            if (c !== card) c.classList.remove('tapped');
+        });
+        card.classList.toggle('tapped');
+    }, { passive: false });
+});
 
 // Other buttons actions alert
 function validatePipeline() {
