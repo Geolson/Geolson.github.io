@@ -1230,7 +1230,7 @@ window.addEventListener('touchcancel', () => {
     }
 });
 
-// Pinch-to-zoom on canvas
+// Pinch-to-zoom on canvas (prevent native zoom and apply custom canvas zoom)
 let lastPinchDist = 0;
 pipelineCanvasContainer.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
@@ -1238,21 +1238,23 @@ pipelineCanvasContainer.addEventListener('touchstart', (e) => {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         lastPinchDist = Math.sqrt(dx * dx + dy * dy);
+        e.preventDefault(); // Stop native browser pinch gesture
     }
-}, { passive: true });
+}, { passive: false });
 
 pipelineCanvasContainer.addEventListener('touchmove', (e) => {
     if (e.touches.length === 2) {
+        e.preventDefault(); // Stop native browser pinch zoom and page pan
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const delta = dist - lastPinchDist;
-        if (Math.abs(delta) > 5) {
-            zoomCanvas(delta > 0 ? 0.03 : -0.03);
+        if (Math.abs(delta) > 3) { // High response threshold
+            zoomCanvas(delta > 0 ? 0.04 : -0.04);
             lastPinchDist = dist;
         }
     }
-}, { passive: true });
+}, { passive: false });
 
 
 /* ==========================================================================
@@ -1490,15 +1492,14 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 // Load default canvas diagrams
 selectPipeline('pfizer');
 
-// Tap-to-toggle stat card details on touch devices
+// Tap-to-toggle stat card details on touch devices (supports mouse and touch smoothly without blocking page scroll)
 document.querySelectorAll('.stat-card').forEach(card => {
-    card.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+    card.addEventListener('click', (e) => {
         document.querySelectorAll('.stat-card.tapped').forEach(c => {
             if (c !== card) c.classList.remove('tapped');
         });
         card.classList.toggle('tapped');
-    }, { passive: false });
+    });
 });
 
 // Other buttons actions alert

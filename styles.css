@@ -159,6 +159,7 @@ body {
     height: 100vh;
     width: 100vw;
     transition: background var(--transition-speed), color var(--transition-speed);
+    touch-action: manipulation;
 }
 
 /* Background Particle Canvas */
@@ -507,6 +508,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     bottom: 0;
     animation: fadeIn 0.3s ease;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .view-panel.active {
@@ -1485,6 +1487,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 .properties-content {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 16px;
 }
 
@@ -1710,8 +1713,11 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 
 #manage-view {
     padding: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+}
+
+#author-view {
+    overflow: hidden;
 }
 
 .manage-layout {
@@ -1967,16 +1973,12 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     #content-container {
         height: calc(100vh - 48px - 52px);
         margin-bottom: 52px;
-        overflow-y: auto;
     }
     
     /* Home View Stacking */
     #home-view {
         padding: 16px;
         gap: 20px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        height: 100%;
     }
     
     .home-hero {
