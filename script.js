@@ -1119,7 +1119,7 @@ function applyCanvasTransform() {
 
 // Canvas Panning click-and-drag grid
 pipelineCanvasContainer.addEventListener('mousedown', (e) => {
-    if (e.target === pipelineCanvasContainer || e.target === connectionsSvg) {
+    if (e.target === pipelineCanvasContainer || e.target === connectionsSvg || e.target === activitiesContainer) {
         isPanning = true;
         startPanX = e.clientX - canvasOffsetX;
         startPanY = e.clientY - canvasOffsetY;
@@ -1169,7 +1169,7 @@ window.addEventListener('mouseup', () => {
 
 // Touch support for canvas panning on mobile/tablets
 pipelineCanvasContainer.addEventListener('touchstart', (e) => {
-    if (e.target === pipelineCanvasContainer || e.target === connectionsSvg) {
+    if (e.target === pipelineCanvasContainer || e.target === connectionsSvg || e.target === activitiesContainer) {
         isPanning = true;
         const touch = e.touches[0];
         startPanX = touch.clientX - canvasOffsetX;

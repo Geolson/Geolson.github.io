@@ -512,8 +512,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 }
 
 .view-panel.active {
-    display: flex;
-    flex-direction: column;
+    display: block;
 }
 
 @keyframes fadeIn {
@@ -1887,6 +1886,10 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 
 /* Tablet Landscape (Widths <= 1024px) */
 @media screen and (max-width: 1024px) {
+    .app-title, .divider {
+        display: none; /* Hide app title to prevent header overlap */
+    }
+    
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1905,6 +1908,13 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     
     .header-center {
         flex: 0 1 280px;
+    }
+}
+
+/* Medium Tablets & Large Mobiles (Widths <= 900px) */
+@media screen and (max-width: 900px) {
+    .service-name {
+        display: none; /* Hide service name on smaller layouts to save space */
     }
 }
 
