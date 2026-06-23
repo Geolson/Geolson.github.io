@@ -532,10 +532,13 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
    ========================================================================== */
 
 #home-view {
-    display: flex;
     flex-direction: column;
     padding: 30px;
     gap: 30px;
+}
+
+#home-view.active {
+    display: flex;
 }
 
 .home-hero {
@@ -1576,10 +1579,13 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
    ========================================================================== */
 
 #monitor-view {
-    display: flex;
     flex-direction: column;
     padding: 24px;
     gap: 20px;
+}
+
+#monitor-view.active {
+    display: flex;
 }
 
 .monitor-header {
@@ -2000,10 +2006,12 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     
     /* Home View Stacking */
     #home-view {
-        display: flex;
         flex-direction: column;
         padding: 16px;
         gap: 20px;
+    }
+    #home-view.active {
+        display: flex;
     }
     
     .home-hero {
