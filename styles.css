@@ -1941,11 +1941,19 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 @media screen and (max-width: 768px) {
     body {
         overflow: hidden;
+        height: 100vh;
+        height: 100dvh;
+    }
+    
+    #app-container {
+        height: 100vh;
+        height: 100dvh;
     }
     
     #main-layout {
         flex-direction: column;
         height: calc(100vh - 48px);
+        height: calc(100dvh - 48px);
         overflow: hidden;
     }
     
@@ -2000,7 +2008,9 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     }
     
     #content-container {
+        flex: none;
         height: calc(100vh - 48px - 52px);
+        height: calc(100dvh - 48px - 52px);
         margin-bottom: 52px;
     }
     
@@ -2256,7 +2266,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
 
 @media screen and (max-width: 768px) {
     .version-label {
-        bottom: 60px; /* Float above the fixed bottom navigation bar */
+        bottom: 8px; /* Inside the constrained content-container, bottom: 8px aligns perfectly above the bottom bar */
         right: 16px;
     }
 }
