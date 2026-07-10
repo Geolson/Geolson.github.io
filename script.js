@@ -17,6 +17,9 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     initParticles();
+    if (typeof drawPipelineConnections === 'function') {
+        drawPipelineConnections();
+    }
 });
 
 // Track mouse position

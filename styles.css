@@ -1971,13 +1971,11 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
         flex-direction: row;
         border-right: none;
         border-top: 1px solid var(--border-color);
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        position: relative;
         padding: 0 16px;
         order: 10;
         z-index: 100;
+        flex-shrink: 0;
     }
     
     .sidebar-top {
@@ -2011,14 +2009,19 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
         flex: none;
         height: calc(100vh - 48px - 52px);
         height: calc(100dvh - 48px - 52px);
-        margin-bottom: 52px;
+        margin-bottom: 0;
     }
     
     /* Home View Stacking */
     #home-view {
         flex-direction: column;
-        padding: 16px;
+        padding: 16px 16px 40px 16px;
         gap: 20px;
+    }
+    
+    /* Monitor View Stacking */
+    #monitor-view {
+        padding: 16px 16px 40px 16px;
     }
     #home-view.active {
         display: flex;
@@ -2132,7 +2135,7 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     }
     
     .manage-main-content {
-        padding: 16px;
+        padding: 16px 16px 40px 16px;
     }
 
     .activity-card {
