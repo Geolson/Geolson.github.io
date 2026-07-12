@@ -1495,15 +1495,52 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 // Load default canvas diagrams
 selectPipeline('pfizer');
 
-// Tap-to-toggle stat card details on touch devices (supports mouse and touch smoothly without blocking page scroll)
+// Tap-to-toggle stat card details on touch devices (desktop gets inline hover; mobile gets modal popup)
 document.querySelectorAll('.stat-card').forEach(card => {
     card.addEventListener('click', (e) => {
-        document.querySelectorAll('.stat-card.tapped').forEach(c => {
-            if (c !== card) c.classList.remove('tapped');
-        });
-        card.classList.toggle('tapped');
+        if (window.innerWidth <= 768) {
+            // Show mobile modal popup
+            const statNum = card.querySelector('.stat-num').textContent;
+            const statLabel = card.querySelector('.stat-label').textContent;
+            const detailTag = card.querySelector('.detail-tag').textContent;
+            const desc = card.querySelector('.stat-hover-details p').textContent;
+            
+            const modal = document.getElementById('stat-modal');
+            if (modal) {
+                document.getElementById('modal-stat-num').textContent = statNum;
+                document.getElementById('modal-stat-label').textContent = statLabel;
+                document.getElementById('modal-detail-tag').textContent = detailTag;
+                document.getElementById('modal-desc').textContent = desc;
+                modal.style.display = 'flex';
+            }
+        } else {
+            // Standard desktop hover toggle fallback
+            document.querySelectorAll('.stat-card.tapped').forEach(c => {
+                if (c !== card) c.classList.remove('tapped');
+            });
+            card.classList.toggle('tapped');
+        }
     });
 });
+
+// Close stat modal event listeners
+const statModal = document.getElementById('stat-modal');
+if (statModal) {
+    // Close on close button click
+    const closeBtn = statModal.querySelector('.modal-close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            statModal.style.display = 'none';
+        });
+    }
+    // Close on clicking backdrop
+    statModal.addEventListener('click', (e) => {
+        if (e.target === statModal) {
+            statModal.style.display = 'none';
+        }
+    });
+}
 
 // Other buttons actions alert
 function validatePipeline() {
