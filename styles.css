@@ -1119,6 +1119,48 @@ html[data-theme="light"] .icon-btn { color: #ffffff; }
     position: relative;
 }
 
+/* Canvas Empty State */
+.canvas-empty-state {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-canvas);
+    color: var(--text-muted);
+    user-select: none;
+}
+
+.empty-state-content {
+    text-align: center;
+    max-width: 280px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.empty-state-logo {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    opacity: 0.65;
+}
+
+.empty-state-content h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.empty-state-content p {
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
 /* Tab Bar */
 #canvas-tabs {
     height: 32px;

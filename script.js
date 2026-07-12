@@ -759,13 +759,35 @@ function selectPipeline(pipelineId) {
     activePipelineId = pipelineId;
     selectedActivityId = null;
     
+    // Ensure the tab element is visible (revert display: none from closeTab)
+    const tabEl = document.getElementById(`tab-${pipelineId}`);
+    if (tabEl) {
+        tabEl.style.display = '';
+    }
+    
     // Update active tab styles
     document.querySelectorAll('.canvas-tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(`tab-${pipelineId}`).classList.add('active');
+    if (tabEl) {
+        tabEl.classList.add('active');
+    }
     
     // Update explorer tree list highlight styles
     document.querySelectorAll('.tree-item').forEach(item => item.classList.remove('active'));
-    document.getElementById(`tree-${pipelineId}`).classList.add('active');
+    const treeItem = document.getElementById(`tree-${pipelineId}`);
+    if (treeItem) {
+        treeItem.classList.add('active');
+    }
+    
+    // Show canvas workspace elements and hide empty state
+    const ribbon = document.getElementById('canvas-ribbon');
+    const container = document.getElementById('pipeline-canvas-container');
+    const pane = document.getElementById('properties-pane');
+    const emptyState = document.getElementById('canvas-empty-state');
+    
+    if (ribbon) ribbon.style.display = '';
+    if (container) container.style.display = '';
+    if (pane) pane.style.display = '';
+    if (emptyState) emptyState.style.display = 'none';
     
     // Load activities & reset panning zoom
     resetZoom();
@@ -935,17 +957,54 @@ function closeTab(pipelineId, event) {
     if (event) event.stopPropagation();
     
     const tab = document.getElementById(`tab-${pipelineId}`);
-    tab.style.display = 'none';
+    if (tab) {
+        tab.style.display = 'none';
+    }
     
     // Switch to another tab if closed active one
     if (activePipelineId === pipelineId) {
         const otherPipelineId = pipelineId === 'pfizer' ? 'hrblock' : 'pfizer';
         const otherTab = document.getElementById(`tab-${otherPipelineId}`);
-        if (otherTab.style.display !== 'none') {
+        if (otherTab && otherTab.style.display !== 'none') {
             selectPipeline(otherPipelineId);
         } else {
-            // Switch back to home
-            document.getElementById('nav-btn-home').click();
+            // Both tabs are closed! Close everything
+            activePipelineId = null;
+            selectedActivityId = null;
+            
+            // Remove explorer active styles
+            document.querySelectorAll('.tree-item').forEach(item => item.classList.remove('active'));
+            
+            // Hide canvas workspace components and show empty state
+            const ribbon = document.getElementById('canvas-ribbon');
+            const container = document.getElementById('pipeline-canvas-container');
+            const pane = document.getElementById('properties-pane');
+            const emptyState = document.getElementById('canvas-empty-state');
+            
+            if (ribbon) ribbon.style.display = 'none';
+            if (container) container.style.display = 'none';
+            if (pane) pane.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'flex';
+        }
+    } else {
+        // If we closed the inactive tab, check if the other is also closed
+        const otherPipelineId = pipelineId === 'pfizer' ? 'hrblock' : 'pfizer';
+        const otherTab = document.getElementById(`tab-${otherPipelineId}`);
+        if (otherTab && otherTab.style.display === 'none') {
+            // Both closed!
+            activePipelineId = null;
+            selectedActivityId = null;
+            document.querySelectorAll('.tree-item').forEach(item => item.classList.remove('active'));
+            
+            const ribbon = document.getElementById('canvas-ribbon');
+            const container = document.getElementById('pipeline-canvas-container');
+            const pane = document.getElementById('properties-pane');
+            const emptyState = document.getElementById('canvas-empty-state');
+            
+            if (ribbon) ribbon.style.display = 'none';
+            if (container) container.style.display = 'none';
+            if (pane) pane.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'flex';
         }
     }
 }

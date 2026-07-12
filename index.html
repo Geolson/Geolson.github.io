@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- External stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=1.4.6">
+    <link rel="stylesheet" href="styles.css?v=1.4.7">
 </head>
 <body>
     <!-- Interactive Background Particles -->
@@ -386,6 +386,19 @@
                                     <div id="properties-view-container"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Empty State (Shown when all tabs are closed) -->
+                            <div id="canvas-empty-state" class="canvas-empty-state" style="display: none;">
+                                <div class="empty-state-content">
+                                    <svg viewBox="0 0 32 32" class="empty-state-logo">
+                                        <path d="M6 10a4 4 0 1 1 8 0 4 4 0 0 1-8 0z" fill="#0078d4" opacity="0.5"/>
+                                        <path d="M18 22a4 4 0 1 1 8 0 4 4 0 0 1-8 0z" fill="#50e6ff" opacity="0.5"/>
+                                        <path d="M10 10v6a4 4 0 0 0 4 4h4" fill="none" stroke="#605e5c" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    <h3>No resources open</h3>
+                                    <p>Select a pipeline from the Factory Resources explorer on the left to start editing.</p>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -635,7 +648,6 @@
         </div>
     </div>
 
-    <!-- Script file -->
-    <script src="script.js?v=1.4.6"></script>
+    <script src="script.js?v=1.4.7"></script>
 </body>
 </html>
